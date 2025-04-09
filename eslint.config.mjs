@@ -1,6 +1,6 @@
 // @ts-check
-import tsEslint from "typescript-eslint";
 import eslint from "@eslint/js";
+import tsEslint from "typescript-eslint";
 import sonarjs from "eslint-plugin-sonarjs";
 import checkFile from "eslint-plugin-check-file";
 
@@ -9,39 +9,30 @@ export default tsEslint.config({
     "@typescript-eslint": tsEslint.plugin,
     "check-file": checkFile,
   },
-  ignores: [".github/knip.ts", "**/.wrangler/**", "jest.config.ts", ".husky/**"],
+  ignores: ["**/*.js", ".github/**.ts"],
   extends: [eslint.configs.recommended, ...tsEslint.configs.recommended, sonarjs.configs.recommended],
   languageOptions: {
     parser: tsEslint.parser,
     parserOptions: {
       project: ["./tsconfig.json"],
+      allowDefaultProject: ["*.mjs"],
+      tsconfigRootDir: import.meta.dirname,
     },
   },
   rules: {
     "check-file/filename-naming-convention": [
       "error",
       {
-        "**/*.{js,ts}": "+([-.a-z0-9])",
+        "**/*.{js,ts}": "+([-._a-z0-9])",
       },
     ],
-    "prefer-arrow-callback": [
-      "warn",
-      {
-        allowNamedFunctions: true,
-      },
-    ],
-    "func-style": [
-      "warn",
-      "declaration",
-      {
-        allowArrowFunctions: false,
-      },
-    ],
+    "prefer-arrow-callback": ["warn", { allowNamedFunctions: true }],
+    "func-style": ["warn", "declaration", { allowArrowFunctions: false }],
     "@typescript-eslint/no-floating-promises": "error",
     "@typescript-eslint/no-non-null-assertion": "error",
     "constructor-super": "error",
     "no-invalid-this": "off",
-    "@typescript-eslint/no-invalid-this": ["error"],
+    "@typescript-eslint/no-invalid-this": "error",
     "no-restricted-syntax": ["error", "ForInStatement"],
     "use-isnan": "error",
     "no-unneeded-ternary": "error",
@@ -70,10 +61,7 @@ export default tsEslint.config({
       {
         selector: "interface",
         format: ["StrictPascalCase"],
-        custom: {
-          regex: "^I[A-Z]",
-          match: false,
-        },
+        custom: { regex: "^I[A-Z]", match: false },
       },
       {
         selector: "memberLike",
@@ -93,12 +81,6 @@ export default tsEslint.config({
       {
         selector: "variable",
         format: ["strictCamelCase", "UPPER_CASE"],
-        leadingUnderscore: "allow",
-        trailingUnderscore: "allow",
-      },
-      {
-        selector: "variable",
-        format: ["strictCamelCase"],
         leadingUnderscore: "allow",
         trailingUnderscore: "allow",
       },
