@@ -10,21 +10,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: 20.10.0
+          bun-version: latest
 
-      - name: Install toolchain
-        run: |
-          npm i -g bun
-          bun install
+      - name: Install dependencies
+        run: bun install
 
       - name: Store PR number
         run: echo ${{ github.event.number }} > pr-number.txt
 
       - name: Run Knip
-        run: bun knip || bun knip --reporter json > knip-results.json
+        run: bun run knip || bun run knip-ci > knip-results.json
 
       - name: Upload knip result
         if: failure()
@@ -34,3 +32,4 @@ jobs:
           path: |
             knip-results.json
             pr-number.txt
+

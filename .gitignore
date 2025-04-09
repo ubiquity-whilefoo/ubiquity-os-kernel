@@ -120,3 +120,5 @@ junit.xml
 
 *.pem
 test-dashboard.md
+cypress/screenshots
+
